@@ -1,0 +1,99 @@
+#include <iostream> 
+#include <stdio.h>
+#include <vector>
+using namespace std;
+
+vector <double> readings;
+vector <double> differ_10;
+vector <double> differ_15;
+
+int main() {
+    int r; 
+    cout << "\n Enter 6 voltages: \n ";
+
+    /* Vector all the voltages input */
+
+    double voltages;
+    for (r = 0; r < 6; r++) {
+        cin >> voltages;
+        readings.push_back(voltages);
+        cout << " ";
+    }
+    
+    /* Calulate average voltages */
+    
+    double total_readings;
+    for (r = 0; r < readings.size(); r++ ) {
+        total_readings += readings[r];
+    }
+    double average = total_readings / readings.size();
+    cout << "\n";
+    printf ("The average is %0.1f volts.", average);
+
+    /* 10% of the average */
+    double tenpercent;
+    tenpercent = average * 0.1;
+    cout << "\n";
+    cout << "10%" << " ";
+    printf ( "= %0.1f volts.", tenpercent);
+
+    /* 15% of the average */
+    double fifteenpercent;
+    fifteenpercent = average * 0.15;
+    cout << "\n";
+    cout << "15%" << " ";
+    printf("= %0.1f volts.", fifteenpercent);
+    cout << "\n";
+
+    /* condition to show problem title */
+
+    int count = 0; 
+    
+    /* compare average & voltage reading */
+    double differ; 
+    for (r = 0; r < readings.size(); r++) {
+        if (readings[r] > average) {
+            differ = readings[r] - average; 
+        }
+        else { differ = average - readings[r];}
+        differ_10.push_back(differ); 
+    
+    /* filter differ that more than 10% of the average */
+        
+        if (differ_10[r] > tenpercent && differ_10[r] != tenpercent) {
+         count += 1; 
+    if (count == 1) {printf ("\nThe following problems occurred: \n");}
+         cout << count << ". " << "Voltage at hour " << r + 1 << " was " << readings[r] << " volts";
+         cout << " " << "(";
+         printf ("difference of %0.1f volts.", differ_10[r]);
+         cout << ")\n";
+        }
+    } 
+    
+     /* extract differ_15 from the voltage readings */
+    
+    for (r = 1; r <= readings.size() - 1; r++) {
+        differ = readings[r] - readings[r - 1];
+        if (differ < 0 && differ != 0) {
+            differ = - differ; 
+        }
+        differ_15.push_back(differ);
+
+        /* display the result of differ_15 */
+        
+        if (differ_15[r - 1] > fifteenpercent && differ_15[r - 1] != fifteenpercent) {
+            count += 1; 
+    if (count == 1) {
+        printf ("\nThe following problems occurred: \n");
+    } 
+            cout << count << ". " << "Voltage change from hour" << " "<< r << " "<< "to hour" << " " << r + 1; 
+            printf (" was %0.1f volts.", differ_15[r -1]);
+            cout << "\n";
+        }
+        else {continue;}
+     }
+    if (count == 0) {
+        printf ("\nNo problems were encountered. \n");
+    }
+     
+    }  
